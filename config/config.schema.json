@@ -1,0 +1,135 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"title": "IoTex MCP Server Configuration",
+	"description": "Configuration schema for IoTex MCP Server",
+	"type": "object",
+	"required": ["server", "adapters"],
+	"properties": {
+		"server": {
+			"type": "object",
+			"description": "Server configuration",
+			"required": ["name", "version"],
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "Server name",
+					"default": "iotex-mcp"
+				},
+				"version": {
+					"type": "string",
+					"description": "Server version",
+					"pattern": "^\\d+\\.\\d+\\.\\d+$"
+				},
+				"log_level": {
+					"type": "string",
+					"description": "Logging level",
+					"enum": ["debug", "info", "warn", "error"],
+					"default": "info"
+				}
+			}
+		},
+		"adapters": {
+			"type": "object",
+			"description": "Protocol adapters configuration",
+			"properties": {
+				"zigbee2mqtt": {
+					"type": "object",
+					"description": "Zigbee2MQTT adapter configuration",
+					"required": ["enabled", "mqtt_broker", "base_topic"],
+					"properties": {
+						"enabled": {
+							"type": "boolean",
+							"description": "Enable Zigbee2MQTT adapter",
+							"default": false
+						},
+						"mqtt_broker": {
+							"type": "string",
+							"description": "MQTT broker URL",
+							"format": "uri",
+							"examples": ["mqtt://localhost:1883", "mqtts://broker.example.com:8883"]
+						},
+						"base_topic": {
+							"type": "string",
+							"description": "MQTT base topic",
+							"default": "zigbee2mqtt"
+						},
+						"username": {
+							"type": "string",
+							"description": "MQTT username (optional)"
+						},
+						"password": {
+							"type": "string",
+							"description": "MQTT password (optional)"
+						}
+					}
+				},
+				"http": {
+					"type": "object",
+					"description": "HTTP adapter configuration",
+					"required": ["enabled"],
+					"properties": {
+						"enabled": {
+							"type": "boolean",
+							"description": "Enable HTTP adapter",
+							"default": false
+						}
+					}
+				}
+			}
+		},
+		"devices": {
+			"type": "object",
+			"description": "Device configurations",
+			"patternProperties": {
+				"^[a-zA-Z0-9_]+$": {
+					"type": "object",
+					"description": "Individual device configuration",
+					"required": ["protocol", "device_id", "friendly_name"],
+					"properties": {
+						"protocol": {
+							"type": "string",
+							"description": "Protocol adapter to use",
+							"enum": ["zigbee2mqtt", "mqtt", "http"]
+						},
+						"device_id": {
+							"type": "string",
+							"description": "Device identifier in the protocol"
+						},
+						"friendly_name": {
+							"type": "string",
+							"description": "Human-readable device name"
+						},
+						"capabilities": {
+							"type": "array",
+							"description": "List of device capabilities",
+							"items": {
+								"type": "string",
+								"enum": [
+									"power",
+									"brightness",
+									"color_temp",
+									"color_rgb",
+									"temperature",
+									"humidity",
+									"motion",
+									"contact",
+									"switch"
+								]
+							},
+							"uniqueItems": true
+						},
+						"location": {
+							"type": "string",
+							"description": "Device location (optional)"
+						},
+						"metadata": {
+							"type": "object",
+							"description": "Additional device metadata",
+							"additionalProperties": true
+						}
+					}
+				}
+			}
+		}
+	}
+}

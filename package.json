@@ -1,0 +1,90 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "iotex-mcp",
+	"version": "0.0.0",
+	"type": "module",
+	"description": "IoT device connector for Model Context Protocol - Bridge AI and IoT devices seamlessly",
+	"keywords": [
+		"mcp",
+		"iot",
+		"mqtt",
+		"zigbee",
+		"home-assistant",
+		"smart-home",
+		"ai",
+		"model-context-protocol"
+	],
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"bin": {
+		"iotex-mcp": "dist/index.js"
+	},
+	"files": [
+		"dist",
+		"config/config.schema.json",
+		"README.md",
+		"LICENSE"
+	],
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"clean": "rimraf dist docs/api",
+		"prebuild": "npm run clean",
+		"docs": "typedoc",
+		"docs:serve": "typedoc --watch",
+		"lint": "eslint src",
+		"lint:fix": "eslint src --fix",
+		"format": "prettier --write \"**/*.{ts,js,json,yaml,yml,md}\"",
+		"format:check": "prettier --check \"**/*.{ts,js,json,yaml,yml,md}\"",
+		"type-check": "tsc --noEmit",
+		"test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js",
+		"test:watch": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --watch",
+		"test:coverage": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --coverage",
+		"changeset": "changeset",
+		"version": "changeset version",
+		"release": "npm run build && changeset publish",
+		"prepublishOnly": "npm run build",
+		"start": "node dist/index.js"
+	},
+	"engines": {
+		"node": ">=22.0.0",
+		"npm": ">=10.0.0"
+	},
+	"dependencies": {
+		"@modelcontextprotocol/sdk": "^1.19.1",
+		"aedes": "^0.51.3",
+		"mqtt": "^5.14.1",
+		"ws": "^8.18.3",
+		"yaml": "^2.8.1"
+	},
+	"devDependencies": {
+		"@changesets/cli": "^2.29.7",
+		"@types/node": "^22.10.2",
+		"@types/ws": "^8.18.1",
+		"eslint": "^9.37.0",
+		"eslint-import-resolver-typescript": "^4.4.4",
+		"eslint-plugin-import": "^2.32.0",
+		"@types/jest": "^29.5.14",
+		"jest": "^30.2.0",
+		"ts-jest": "^29.2.5",
+		"prettier": "^3.6.2",
+		"rimraf": "^6.0.1",
+		"typedoc": "^0.28.13",
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.45.0"
+	},
+	"overrides": {
+		"glob": "^10.0.0",
+		"inflight": "npm:@jsdevtools/inflight@^2.0.1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/UE-DND/iotex.git"
+	},
+	"bugs": {
+		"url": "https://github.com/UE-DND/iotex/issues"
+	},
+	"homepage": "https://github.com/UE-DND/iotex#readme",
+	"author": "UE-DND",
+	"license": "MIT"
+}

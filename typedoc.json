@@ -1,0 +1,36 @@
+{
+	"$schema": "https://typedoc.org/schema.json",
+	"entryPoints": [
+		"./src/index.ts",
+		"./src/mcp-server.ts",
+		"./src/server.ts",
+		"./src/core",
+		"./src/domain",
+		"./src/adapters",
+		"./src/infrastructure",
+		"./src/storage",
+		"./src/utils"
+	],
+	"entryPointStrategy": "expand",
+	"out": "docs/api",
+	"plugin": [],
+	"excludePrivate": true,
+	"excludeProtected": false,
+	"excludeExternals": true,
+	"readme": "README.md",
+	"name": "IoTex MCP 服务器 API 文档",
+	"includeVersion": true,
+	"sort": ["source-order"],
+	"highlightLanguages": ["typescript", "javascript", "json", "yaml", "bash", "mermaid"],
+	"validation": {
+		"notExported": true,
+		"invalidLink": true,
+		"notDocumented": false
+	},
+	"categorizeByGroup": true,
+	"categoryOrder": ["Core", "Domain", "Adapters", "Infrastructure", "Storage", "Utilities", "*"],
+	"navigationLinks": {
+		"GitHub": "https://github.com/UE-DND/iotex",
+		"项目文档": "https://github.com/UE-DND/iotex/tree/main/docs"
+	}
+}
