@@ -2,9 +2,10 @@
  * 基于本地 JSON 文件的状态存储实现（轻量 KV），适合单机与小规模数据
  */
 
+import { randomBytes } from 'node:crypto';
 import { existsSync } from 'node:fs';
-import { readFile, writeFile, rename, mkdir } from 'node:fs/promises';
-import { dirname } from 'node:path';
+import { readFile, writeFile, rename, mkdir, unlink } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
 
 import { mergeDeviceState } from '../domain/device-state.js';
 
@@ -12,6 +13,7 @@ import type { StateStore } from './state-store.js';
 
 const MAX_CONTENT_PREVIEW = 100;
 const JSON_INDENT = 2;
+const TEMP_FILE_RANDOM_BYTES = 8;
 
 /**
  * JSON 存储配置选项
@@ -19,6 +21,30 @@ const JSON_INDENT = 2;
 export interface JsonStoreOptions {
 	/** 是否使用原子写入（默认 true） */
 	atomic?: boolean;
+}
+
+/**
+ * 原子写入：使用安全的临时文件，然后重命名
+ */
+async function atomicWrite(filePath: string, content: string, dir: string): Promise<void> {
+	// 生成唯一的临时文件名（使用加密安全的随机字节）
+	const randomSuffix = randomBytes(TEMP_FILE_RANDOM_BYTES).toString('hex');
+	const tempPath = join(dir, `.tmp-${randomSuffix}.json`);
+
+	try {
+		// 写入临时文件，设置严格权限（仅所有者可读写）
+		await writeFile(tempPath, content, { encoding: 'utf-8', mode: 0o600 });
+		// 原子重命名
+		await rename(tempPath, filePath);
+	} catch (error) {
+		// 如果重命名失败，清理临时文件
+		try {
+			await unlink(tempPath);
+		} catch {
+			// 忽略清理错误
+		}
+		throw error;
+	}
 }
 
 /**
@@ -37,12 +63,10 @@ async function persistData(
 		await mkdir(dir, { recursive: true });
 
 		if (atomic) {
-			// 原子写入：先写入临时文件，然后重命名
-			const tempPath = `${filePath}.tmp`;
-			await writeFile(tempPath, content, 'utf-8');
-			await rename(tempPath, filePath);
+			await atomicWrite(filePath, content, dir);
 		} else {
-			await writeFile(filePath, content, 'utf-8');
+			// 直接写入，同样设置严格权限（仅所有者可读写）
+			await writeFile(filePath, content, { encoding: 'utf-8', mode: 0o600 });
 		}
 	} catch (error) {
 		const message = error instanceof Error ? error.message : String(error);
