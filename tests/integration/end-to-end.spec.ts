@@ -14,7 +14,6 @@ import { createCommandQueue } from '../../src/core/command-queue.js';
 import { createJsonStateStore } from '../../src/storage/json-store.js';
 import { createEventStore } from '../../src/storage/event-store.js';
 import { createStateEmitter } from '../../src/adapters/base-adapter.js';
-import { applyDeviceStatePatch } from '../../src/core/device-manager.js';
 import { validateCommand } from '../../src/domain/command.js';
 import type { ProtocolAdapter } from '../../src/domain/adapter-interface.js';
 

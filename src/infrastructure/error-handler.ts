@@ -20,14 +20,17 @@ export interface NormalizedError {
  */
 function safeStringify(value: unknown): string {
 	try {
-		if (typeof value === 'object' && value !== null) {
-			// 尝试提取可能的 toString 或 message
+		// 检查是否为对象类型
+		if (value !== null && typeof value === 'object') {
+			// 尝试提取可能的 message 属性
 			if ('message' in value && typeof value.message === 'string') {
 				return value.message;
 			}
 			// 对于对象，使用 JSON.stringify
 			return JSON.stringify(value);
 		}
+
+		// 对于基本类型（string, number, boolean），使用 String()
 		return String(value);
 	} catch {
 		return 'Error cannot be converted to string';
