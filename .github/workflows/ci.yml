@@ -106,7 +106,7 @@ jobs:
           echo "✅ 构建产物验证通过"
 
       - name: 上传构建产物
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: dist-${{ github.sha }}
           path: dist/
