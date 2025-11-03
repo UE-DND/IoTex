@@ -144,7 +144,7 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: 上传页面 artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: ./docs/api
 
