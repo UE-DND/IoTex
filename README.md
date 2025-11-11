@@ -1,6 +1,6 @@
 # IoTex
 
-> 基于 Model Context Protocol (MCP) 的硬件设备连接工具
+> 基于 Model Context Protocol (MCP) 的 IoT 设备接入层
 
 通过标准化 MCP 协议为 AI 应用提供 IoT 设备访问和控制能力，实现自然语言与物理设备的交互。
 
